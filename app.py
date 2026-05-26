@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -41,11 +42,9 @@ plt.rcParams.update({
     "grid.alpha":       0.5,
 })
 
-DATA_URL = "https://raw.githubusercontent.com/zoha685/earthquake-dashboard/refs/heads/main/database.csv"
-
-@st.cache_data(show_spinner="Loading earthquake data...")
-def load_data(url):
-    df = pd.read_csv(url)
+@st.cache_data
+def load_data():
+    df = pd.read_csv("https://raw.githubusercontent.com/zoha685/earthquake-dashboard/refs/heads/main/database.csv")
     df["DateTime"] = pd.to_datetime(df["Date"] + " " + df["Time"], errors="coerce")
     df["Year"] = df["DateTime"].dt.year
     df["Month"] = df["DateTime"].dt.month
@@ -59,7 +58,7 @@ def load_data(url):
     df.reset_index(drop=True, inplace=True)
     return df
 
-df_raw = load_data(DATA_URL)
+df_raw = load_data()
 
 with st.sidebar:
     st.markdown("## 🔍 Filters")
@@ -130,15 +129,15 @@ def kpi(col, label, value, sub=""):
     </div>""", unsafe_allow_html=True)
 
 kpi(k1, "Total Records", f"{len(df):,}", "filtered events")
-kpi(k2, "Avg Magnitude", f"{df['Magnitude'].mean():.2f}" if len(df) else "—", "Richter scale")
-kpi(k3, "Max Magnitude", f"{df['Magnitude'].max():.1f}" if len(df) else "—", "highest recorded")
-kpi(k4, "Avg Depth", f"{df['Depth'].mean():.1f} km" if len(df) else "—", "below surface")
-kpi(k5, "Max Depth", f"{df['Depth'].max():.0f} km" if len(df) else "—", "deepest event")
+kpi(k2, "Avg Magnitude", f"{df['Magnitude'].mean():.2f}" if len(df) else "-", "Richter scale")
+kpi(k3, "Max Magnitude", f"{df['Magnitude'].max():.1f}" if len(df) else "-", "highest recorded")
+kpi(k4, "Avg Depth", f"{df['Depth'].mean():.1f} km" if len(df) else "-", "below surface")
+kpi(k5, "Max Depth", f"{df['Depth'].max():.0f} km" if len(df) else "-", "deepest event")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
 if df.empty:
-    st.warning("⚠️ No data matches the current filters.")
+    st.warning("No data matches the current filters.")
     st.stop()
 
 def styled_fig(w=7, h=4):
