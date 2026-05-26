@@ -44,7 +44,7 @@ plt.rcParams.update({
 })
 @st.cache_data
 def load_data():
-   df = pd.read_csv("https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/database.csv")
+   df = pd.read_csv("https://raw.githubusercontent.com/zoha685/earthquake-dashboard/refs/heads/main/database.csv")
     df["DateTime"] = pd.to_datetime(df["Date"] + " " + df["Time"], errors="coerce")
     df["Year"]     = df["DateTime"].dt.year
     df["Month"]    = df["DateTime"].dt.month
@@ -365,4 +365,5 @@ st.markdown("""
     🌍 Earthquake Dashboard · EDA Project · Instructor: Ali Hassan Sherazi
 </p>
 """, unsafe_allow_html=True)
+
 
